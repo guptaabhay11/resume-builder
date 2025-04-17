@@ -1,12 +1,10 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { type NextFunction, type Request, type Response } from "express";
 
-// Extend the Request interface to include the user property
+// Extend the Express.User type to include IUser properties
 declare global {
   namespace Express {
-    interface Request {
-      user?: IUser;
-    }
+    interface User extends IUser {}
   }
 }
 import expressAsyncHandler from "express-async-handler";

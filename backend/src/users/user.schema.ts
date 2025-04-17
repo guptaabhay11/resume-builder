@@ -21,25 +21,15 @@ const UserSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      required: true,
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
-    position:{
-      type: String
-    },
-    department:{
-      type: String
+    pdf: {
+      type: [String],
     },
     refreshToken: {
       type: String,
-    },
-    forgotPasswordToken: {
-      type: String,
-    },
-    forgotPasswordTokenExpiry: {
-      type: Date,
-    },
+    }
   },
   { timestamps: true }
 );

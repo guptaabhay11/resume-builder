@@ -4,10 +4,8 @@ export interface IUser extends BaseSchema {
   name: string;
   email: string;
   password: string;
-  department?:string;
-  position?:string;
-  role: "ADMIN" | "USER" ;
+  role: string;
+  pdf: string[];
   refreshToken?: string;
-  forgotPasswordToken: string;
-  forgotPasswordTokenExpiry: Date | "";
+
 }
