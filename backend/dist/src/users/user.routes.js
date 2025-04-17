@@ -59,7 +59,7 @@ router
     .post("/register", userValidator.createUser, catch_error_middleware_1.catchError, userController.createUser)
     .post("/login", userValidator.login, catch_error_middleware_1.catchError, passport_1.default.authenticate('login', { session: false }), userController.login)
     .get("/me", (0, role_auth_middleware_1.roleAuth)(['USER']), userController.getUserInfo);
-//  .post("/upload-pdf", authenticateUser,upload.single('pdf'), userController.uploadPdf)
+// .post("/upload-pdf", authenticateUser,upload.single('pdf'), userController.uploadPdf)
 router.post("/send-email", multer_1.default.single("file"), (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, subject, html } = req.body;
     const file = req.file;

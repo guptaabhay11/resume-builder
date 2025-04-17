@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadToCloudinary = exports.upload = void 0;
 const multer_1 = __importDefault(require("multer"));
 const cloudinary_1 = require("cloudinary");
-const user_schema_1 = __importDefault(require("../../users/user.schema"));
 require('dotenv').config();
 cloudinary_1.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -31,6 +30,8 @@ const uploadToCloudinary = (req, res, next) => __awaiter(void 0, void 0, void 0,
         if (!file)
             res.status(400).json({ success: false, message: 'No file provided' });
         const userId = (_a = req.auth) === null || _a === void 0 ? void 0 : _a.id;
+        console.log("userId from addFile", userId);
+        console.log("file from addFile", file);
         if (!userId) {
             res.status(401).json({ success: false, message: 'User not authenticated' });
             return;
@@ -39,6 +40,7 @@ const uploadToCloudinary = (req, res, next) => __awaiter(void 0, void 0, void 0,
             res.status(400).json({ success: false, message: 'Only PDF files are allowed' });
             return;
         }
+        ``;
         // 1) upload to Cloudinary
         const uploadPdfToCloudinary = (fileBuffer, userId) => __awaiter(void 0, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
@@ -55,18 +57,20 @@ const uploadToCloudinary = (req, res, next) => __awaiter(void 0, void 0, void 0,
                 uploadStream.end(fileBuffer);
             });
         });
+        console.log("uplaodPdfToCloudinary", uploadPdfToCloudinary);
         // 2) PUSH THE CLOUDINARY URL (not file.path)
-        const updatedUser = yield user_schema_1.default.findByIdAndUpdate(userId, { $push: { pdf: uploadPdfToCloudinary } }, // ← here!
-        { new: true }).select('-password');
-        if (!updatedUser)
-            res.status(404).json({ success: false, message: 'User not found' });
-        return;
-        res.status(200).json({
-            success: true,
-            message: 'PDF uploaded to Cloudinary and user updated',
-            data: updatedUser,
-        });
-        return;
+        // const updatedUser = await userSchema.findByIdAndUpdate(
+        //   userId,
+        //   { $push: { pdf: uploadPdfToCloudinary } },   // ← here!
+        //   { new: true }
+        // ).select('-password');
+        // if (!updatedUser)  res.status(404).json({ success: false, message: 'User not found' }); 
+        //  res.status(200).json({
+        //   success: true,
+        //   message: 'PDF uploaded to Cloudinary and user updated',
+        //   data: updatedUser,
+        // });
+        // return
     }
     catch (error) {
         console.error(error);

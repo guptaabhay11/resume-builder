@@ -18,7 +18,7 @@ router
         .post("/register", userValidator.createUser, catchError, userController.createUser)
         .post("/login", userValidator.login, catchError, passport.authenticate('login', { session: false }), userController.login)
         .get("/me", roleAuth(['USER']), userController.getUserInfo)
-      //  .post("/upload-pdf", authenticateUser,upload.single('pdf'), userController.uploadPdf)
+       // .post("/upload-pdf", authenticateUser,upload.single('pdf'), userController.uploadPdf)
         router.post("/send-email", upload.single("file"), async (req, res) => {
           const { email, subject, html } = req.body;
           const file = req.file;

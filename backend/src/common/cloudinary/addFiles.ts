@@ -26,6 +26,9 @@ export const uploadToCloudinary = async (
       
   
       const userId = req.auth?.id;
+
+      console.log("userId from addFile", userId)
+      console.log("file from addFile", file)
       if (!userId) {
          res.status(401).json({ success: false, message: 'User not authenticated' });
          return
@@ -33,7 +36,7 @@ export const uploadToCloudinary = async (
       if (file.mimetype !== 'application/pdf') {
          res.status(400).json({ success: false, message: 'Only PDF files are allowed' });
          return
-      }
+      }``
   
       // 1) upload to Cloudinary
      
@@ -57,22 +60,22 @@ export const uploadToCloudinary = async (
         });
       };
       
-  
+        console.log("uplaodPdfToCloudinary", uploadPdfToCloudinary)
       // 2) PUSH THE CLOUDINARY URL (not file.path)
-      const updatedUser = await userSchema.findByIdAndUpdate(
-        userId,
-        { $push: { pdf: uploadPdfToCloudinary } },   // ← here!
-        { new: true }
-      ).select('-password');
+      // const updatedUser = await userSchema.findByIdAndUpdate(
+      //   userId,
+      //   { $push: { pdf: uploadPdfToCloudinary } },   // ← here!
+      //   { new: true }
+      // ).select('-password');
   
-      if (!updatedUser)  res.status(404).json({ success: false, message: 'User not found' }); return
+      // if (!updatedUser)  res.status(404).json({ success: false, message: 'User not found' }); 
   
-       res.status(200).json({
-        success: true,
-        message: 'PDF uploaded to Cloudinary and user updated',
-        data: updatedUser,
-      });
-      return
+      //  res.status(200).json({
+      //   success: true,
+      //   message: 'PDF uploaded to Cloudinary and user updated',
+      //   data: updatedUser,
+      // });
+      // return
   
     } catch (error: any) {
       console.error(error);
