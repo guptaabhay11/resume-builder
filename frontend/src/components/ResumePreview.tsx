@@ -1,67 +1,113 @@
 import React from "react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
-const ResumePreview = ({ data }: { data: any }) => {
+interface ResumeData {
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  skills: string[];
+  description: string;
+  education: {
+    degree: string;
+    institution: string;
+    startYear: string;
+    endYear: string;
+  }[];
+  projects: {
+    name: string;
+    description: string;
+  }[];
+}
+
+const ResumePreview: React.FC<{ data: ResumeData }> = ({ data }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        fontFamily: "Segoe UI, sans-serif",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        overflow: "hidden",
-       
-      }}
-    >
+    <div className="flex flex-col md:flex-row font-sans rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200">
       {/* Sidebar */}
-      <div style={{ background: "#2E3B55", color: "#fff", width: "30%", padding: "20px" }}>
-        <h2 style={{ marginTop: 0 }}>{data.name}</h2>
-        <p>{data.email}</p>
-        <p>{data.phone}</p>
-        <p>{data.city}</p>
+      <aside className="bg-blue-50 text-gray-800 w-full md:w-1/3 p-8 space-y-8">
+        <div className="text-center">
+          <div className="w-24 h-24 mx-auto rounded-full bg-gray-200 flex items-center justify-center text-4xl font-bold text-gray-500">
+            {data.name.charAt(0)}
+          </div>
+          <h1 className="mt-4 text-3xl font-extrabold text-blue-600">{data.name}</h1>
+        </div>
 
-        <h3 style={{ marginTop: "40px", borderBottom: "1px solid #fff" }}>Skills</h3>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {data.skills.map((skill: string, index: number) => (
-            <li key={index} style={{ marginBottom: "8px" }}>• {skill}</li>
-          ))}
-        </ul>
-      </div>
+        <div className="space-y-4 text-sm">
+          <div className="flex items-center space-x-2">
+            <Mail size={16} className="text-blue-500" />
+            <span>{data.email}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Phone size={16} className="text-blue-500" />
+            <span>{data.phone}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <MapPin size={16} className="text-blue-500" />
+            <span>{data.city}</span>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-700 mb-3 border-b border-blue-200 pb-2">
+            Skills
+          </h3>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
+            {data.skills.map((skill, i) => (
+              <li
+                key={i}
+                className="text-sm bg-white border border-gray-200 rounded-lg py-1 px-2 text-gray-700"
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
 
       {/* Main Content */}
-      <div style={{ padding: "20px", width: "70%" }}>
-        <section style={{ marginBottom: "20px" }}>
-          <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "4px" }}>
+      <main className="w-full md:w-2/3 p-8 space-y-10">
+        <section>
+          <h2 className="text-xl font-bold text-gray-800 mb-4 inline-block border-b-2 border-blue-500 pb-1">
             Professional Summary
           </h2>
-          <p>{data.description}</p>
-        </section>
-
-        <section style={{ marginBottom: "20px" }}>
-          <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "4px" }}>
-            Education
-          </h2>
-          {data.education.map((edu: any, index: number) => (
-            <div key={index} style={{ marginBottom: "12px" }}>
-              <strong>{edu.degree}</strong>, {edu.institution}
-              <p style={{ margin: 0, color: "#555" }}>
-                {edu.startYear}  {edu.endYear}
-              </p>
-            </div>
-          ))}
+          <p className="text-gray-700 leading-relaxed">{data.description}</p>
         </section>
 
         <section>
-          <h2 style={{ borderBottom: "2px solid #eee", paddingBottom: "4px" }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-4 inline-block border-b-2 border-blue-500 pb-1">
+            Education
+          </h2>
+          <div className="space-y-6">
+            {data.education.map((edu, idx) => (
+              <div key={idx} className="">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-semibold text-gray-900">{edu.degree}</h3>
+                  <span className="text-sm text-gray-500">
+                    {edu.startYear} - {edu.endYear}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 mt-1">{edu.institution}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-bold text-gray-800 mb-4 inline-block border-b-2 border-blue-500 pb-1">
             Projects
           </h2>
-          {data.projects.map((proj: any, index: number) => (
-            <div key={index} style={{ marginBottom: "12px" }}>
-              <strong>{proj.name}</strong>
-              <p style={{ margin: "4px 0", color: "#555" }}>{proj.description}</p>
-            </div>
-          ))}
+          <div className="space-y-6">
+            {data.projects.map((proj, idx) => (
+              <div key={idx} className="">
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">{proj.name}</h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {proj.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 };

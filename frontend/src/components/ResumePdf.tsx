@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from '@react-pdf/renderer';
 
+// Create styles
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'row',
@@ -21,56 +22,73 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sidebarName: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   sidebarText: {
-    marginBottom: 6,
+    marginBottom: 8,
+    fontSize: 11,
   },
   sidebarSectionHeader: {
-    marginTop: 20,
-    fontSize: 12,
+    marginTop: 24,
+    fontSize: 14,
     fontWeight: 'bold',
     borderBottom: '1 solid #fff',
     paddingBottom: 4,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   skillItem: {
-    backgroundColor: '#ffffff',
-    color: '#2E3B55',
-    fontSize: 10,
-    marginRight: 6,
     marginBottom: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 3,
-    borderRadius: 4,
-  },
-  skillContainer: {
+    display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
   },
-
+  skillBullet: {
+    width: 10,
+    marginRight: 5,
+  },
+  skillText: {
+    flex: 1,
+  },
+  
   // Main Content
   main: {
     width: '70%',
     padding: 20,
+    backgroundColor: '#fff',
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 20,
   },
   sectionHeader: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
-    borderBottom: '1 solid #333',
+    borderBottom: '1 solid #2E3B55',
+    color: '#2E3B55',
     paddingBottom: 4,
-    marginBottom: 6,
+    marginBottom: 10,
   },
   text: {
     marginBottom: 4,
+    lineHeight: 1.4,
   },
   item: {
-    marginBottom: 10,
+    marginBottom: 12,
+  },
+  itemTitle: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  itemSubtitle: {
+    fontSize: 11,
+    color: '#555555',
+    marginBottom: 4,
+  },
+  dateRange: {
+    fontSize: 10,
+    color: '#666666',
+    fontStyle: 'italic',
+    marginBottom: 2,
   },
 });
 
@@ -83,15 +101,16 @@ const ResumePDF = ({ data }: { data: any }) => (
         <Text style={styles.sidebarText}>{data.email}</Text>
         <Text style={styles.sidebarText}>{data.phone}</Text>
         <Text style={styles.sidebarText}>{data.city}</Text>
-
+        
         <Text style={styles.sidebarSectionHeader}>Skills</Text>
-        <View style={styles.skillContainer}>
-          {data.skills.map((skill: string, index: number) => (
-            <Text key={index} style={styles.skillItem}>{skill}</Text>
-          ))}
-        </View>
+        {data.skills.map((skill: string, index: number) => (
+          <View key={index} style={styles.skillItem}>
+            <Text style={styles.skillBullet}>•</Text>
+            <Text style={styles.skillText}>{skill}</Text>
+          </View>
+        ))}
       </View>
-
+      
       {/* Main */}
       <View style={styles.main}>
         {/* Summary */}
@@ -99,28 +118,25 @@ const ResumePDF = ({ data }: { data: any }) => (
           <Text style={styles.sectionHeader}>Professional Summary</Text>
           <Text style={styles.text}>{data.description}</Text>
         </View>
-
+        
         {/* Education */}
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Education</Text>
           {data.education.map((edu: any, index: number) => (
             <View key={index} style={styles.item}>
-              <Text style={styles.text}>
-                <Text style={{ fontWeight: 'bold' }}>{edu.degree}</Text> at {edu.institution}
-              </Text>
-              <Text style={styles.text}>{edu.startYear} - {edu.endYear}</Text>
+              <Text style={styles.itemTitle}>{edu.degree}</Text>
+              <Text style={styles.itemSubtitle}>{edu.institution}</Text>
+              <Text style={styles.dateRange}>{edu.startYear} - {edu.endYear}</Text>
             </View>
           ))}
         </View>
-
+        
         {/* Projects */}
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>Projects</Text>
           {data.projects.map((proj: any, index: number) => (
             <View key={index} style={styles.item}>
-              <Text style={styles.text}>
-                <Text style={{ fontWeight: 'bold' }}>{proj.name}</Text>
-              </Text>
+              <Text style={styles.itemTitle}>{proj.name}</Text>
               <Text style={styles.text}>{proj.description}</Text>
             </View>
           ))}
