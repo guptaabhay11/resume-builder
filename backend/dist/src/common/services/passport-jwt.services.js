@@ -63,20 +63,26 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = require("passport-jwt");
 const passport_local_1 = require("passport-local");
-const userService = __importStar(require("../../users/user.service"));
+const userService = __importStar(require("../../user/user.service"));
+require('dotenv').config();
 const isValidPassword = function (value, password) {
     return __awaiter(this, void 0, void 0, function* () {
         const compare = yield bcrypt_1.default.compare(value, password);
         return compare;
     });
 };
+console.log("process.env.JWT_SECRET", process.env.JWT_SECRET);
 const initPassport = () => {
     passport_1.default.use(new passport_jwt_1.Strategy({
         secretOrKey: process.env.JWT_ACCESS_SECRET || "default_secret",
         jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
     }, (token, done) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            done(null, token.user);
+            if (!token) {
+                return done((0, http_errors_1.default)(401, "Token missing"));
+            }
+            // Check token structure
+            done(null, token); // Pass the token to req.user
         }
         catch (error) {
             done(error);

@@ -11,6 +11,7 @@ declare module "*.svg" {
     email: string;
     password?: string;
     role: "USER" | "ADMIN";
+    pdf?: string[];
     refreshToken: string;
     createdAt?: Date;
     updatedAt?: Date;

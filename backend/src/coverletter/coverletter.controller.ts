@@ -2,7 +2,7 @@ import * as CoverLetterService from "./coverletter.service";
 import { type Request, type Response } from "express";
 import { createResponse } from "../common/helper/response.helper";
 import asyncHandler from "express-async-handler";
-import { IUser } from "../users/user.dto";
+import { IUser } from "../user/user.dto";
 /**
  * Fetches all cover letters.
  * @route GET /cover-letters

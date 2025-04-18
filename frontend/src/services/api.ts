@@ -51,8 +51,24 @@ export const api = createApi({
           method: "POST",
           body: data,
         }),
+
+    }),
+    uploadPdf: builder.mutation<ApiResponse<{ url: string }>, FormData>({
+      query: (formData) => ({
+        url: "/users/upload-pdf",
+        method: "POST",
+        body: formData,
       }),
+    }),
   }),
 });
 
-export const { useMeQuery, useLoginMutation, useLogoutMutation, useRegisterMutation, useUpdateUserMutation, useSendFileMutation } = api;
+export const {
+  useMeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useRegisterMutation,
+  useUpdateUserMutation,
+  useSendFileMutation,
+  useUploadPdfMutation,
+} = api;

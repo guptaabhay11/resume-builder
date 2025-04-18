@@ -11,7 +11,7 @@ import errorHandler from "./src/common/middleware/error-handler.middleware";
 import {initDB} from "./src/common/services/database.services";
 import { initPassport } from "./src/common/services/passport-jwt.services";
 import routers from "./src/routes";
-import { type IUser } from "./src/users/user.dto";
+import { type IUser } from "./src/user/user.dto";
 require('dotenv').config()
 
 declare global {

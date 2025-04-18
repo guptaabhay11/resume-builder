@@ -9,7 +9,7 @@ declare global {
 }
 import expressAsyncHandler from "express-async-handler";
 import createHttpError from "http-errors";
-import { type IUser } from "../../users/user.dto";
+import { type IUser } from "../../user/user.dto";
 import process from "process";
 
 export const roleAuth = (roles: IUser["role"][], publicRoutes: string[] = []) =>

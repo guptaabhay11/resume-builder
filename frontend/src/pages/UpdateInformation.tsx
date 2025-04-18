@@ -37,7 +37,8 @@ import {
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import ResumePDF from "./ResumePdf";
 import ResumePreview from "./ResumePreview";
-import { useSendFileMutation } from "../services/api"; // adjust path if needed
+import { useSendFileMutation, useUploadPdfMutation } from "../services/api"; // adjust path if needed
+import { toast } from "react-toastify";
 
 // Data types
 interface Education {
@@ -131,7 +132,13 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
     { label: "Review", icon: <Download /> },
   ];
 
+
+  const [uploadPdf, { isLoading }] = useUploadPdfMutation();
+  const [uploading, setUploading] = useState(false);
+  
+
   const [activeStep, setActiveStep] = useState(0);
+
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [resumeData, setResumeData] = useState<ResumeData>({
     name: "",
@@ -206,6 +213,27 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
       "skills",
       resumeData.skills.filter((_, idx) => idx !== i)
     );
+
+
+    const handleSaveResume = async () => {
+      if (uploading) return;
+      setUploading(true);
+      toast.info("Generating your resume...");
+    
+      try {
+        const blob = await pdf(<ResumePDF data={resumeData} />).toBlob();
+        const formData = new FormData();
+        formData.append('file', blob, `${resumeData.name}_resume.pdf`);
+    
+        await uploadPdf(formData).unwrap();
+        toast.success("Resume saved to your profile!");
+      } catch (error) {
+        console.error("Upload error:", error);
+        toast.error("Failed to save resume. Please try again.");
+      } finally {
+        setUploading(false);
+      }
+    };
 
   // Validation for each step
   const validateCurrentStep = (): boolean => {
@@ -565,71 +593,90 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
             </Paper>
           </Box>
         );
-      case 6:
-        return (
-          <Box mt={4} textAlign="center">
-            <Typography
-              variant="h5"
-              gutterBottom
-              color="primary"
-              fontWeight="bold"
-              mb={3}
-            >
-              Review Your Resume
-            </Typography>
-            <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
-              <ResumePreview data={resumeData} />
-            </Paper>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              justifyContent="center"
-              spacing={2}
-              sx={{ mt: 4 }}
-            >
-              <PDFDownloadLink
-                document={<ResumePDF data={resumeData} />}
-                fileName={`${resumeData.name.replace(/\s/g, "_")}_resume.pdf`}
-                style={{ textDecoration: "none" }}
+        case 6:
+          return (
+            <Box mt={4} textAlign="center">
+              <Typography
+                variant="h5"
+                gutterBottom
+                color="primary"
+                fontWeight="bold"
+                mb={3}
               >
-                {({ loading }) =>
-                  loading ? (
-                    <Button disabled variant="contained">
-                      <CircularProgress size={20} sx={{ mr: 1 }} />
-                      Preparing PDF…
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<Download />}
-                      size="large"
-                    >
-                      Download PDF
-                    </Button>
-                  )
-                }
-              </PDFDownloadLink>
-              <Button
-                variant="contained"
-                color="secondary"
-                startIcon={sending ? <CircularProgress size={20} /> : <Send />}
-                onClick={handleSendEmail}
-                disabled={sending}
-                size="large"
+                Review Your Resume
+              </Typography>
+        
+              <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
+                <ResumePreview data={resumeData} />
+              </Paper>
+        
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                justifyContent="center"
+                spacing={2}
+                sx={{ mt: 4 }}
               >
-                {sending ? "Sending…" : "Send to Email"}
-              </Button>
-            </Stack>
-            {isSuccess && (
-              <Chip
-                label="Email sent successfully!"
-                color="success"
-                variant="outlined"
-                sx={{ mt: 3 }}
-              />
-            )}
-          </Box>
-        );
+                <PDFDownloadLink
+                  document={<ResumePDF data={resumeData} />}
+                  fileName={`${resumeData.name.replace(/\s/g, "_")}_resume.pdf`}
+                  style={{ textDecoration: "none" }}
+                >
+                  {({ loading }) =>
+                    loading ? (
+                      <Button disabled variant="contained">
+                        <CircularProgress size={20} sx={{ mr: 1 }} />
+                        Preparing PDF…
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<Download />}
+                        size="large"
+                      >
+                        Download PDF
+                      </Button>
+                    )
+                  }
+                </PDFDownloadLink>
+        
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={sending ? <CircularProgress size={20} /> : <Send />}
+                  onClick={handleSendEmail}
+                  disabled={sending}
+                  size="large"
+                >
+                  {sending ? "Sending…" : "Send to Email"}
+                </Button>
+        
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={
+                    uploading || isLoading ? (
+                      <CircularProgress color="inherit" size={20} />
+                    ) : undefined
+                  }
+                  onClick={handleSaveResume}
+                  disabled={uploading || isLoading}
+                  size="large"
+                >
+                  {uploading ? "Saving…" : "Save to Profile"}
+                </Button>
+              </Stack>
+        
+              {isSuccess && (
+                <Chip
+                  label="Email sent successfully!"
+                  color="success"
+                  variant="outlined"
+                  sx={{ mt: 3 }}
+                />
+              )}
+            </Box>
+          );
       default:
         return null;
     }

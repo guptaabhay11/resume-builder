@@ -5,14 +5,15 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";
-import { type IUser } from "../../users/user.dto";
-import * as userService from "../../users/user.service";
+import { type IUser } from "../../user/user.dto";
+import * as userService from "../../user/user.service";
+require('dotenv').config()
 
 const isValidPassword = async function (value: string, password: string) {
   const compare = await bcrypt.compare(value, password);
   return compare;
 };
-
+console.log("process.env.JWT_SECRET", process.env.JWT_SECRET)
 export const initPassport = (): void => {
   passport.use(
     new Strategy(
@@ -20,9 +21,13 @@ export const initPassport = (): void => {
         secretOrKey: process.env.JWT_ACCESS_SECRET || "default_secret",
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       },
-      async (token: { user: Request["user"] }, done) => {
+      async (token: any, done) => {
         try {
-          done(null, token.user);
+          if (!token) {
+            return done(createError(401, "Token missing"));
+          }
+           // Check token structure
+          done(null, token); // Pass the token to req.user
         } catch (error) {
           done(error);
         }
