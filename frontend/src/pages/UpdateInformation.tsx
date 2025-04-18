@@ -606,9 +606,10 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
                 Review Your Resume
               </Typography>
         
-              <Paper elevation={2} sx={{ p: 3, borderRadius: 2 }}>
-                <ResumePreview data={resumeData} />
-              </Paper>
+              <div className="p-4 rounded-xl shadow-md border border-gray-200 bg-white">
+                <h2>hey there</h2>
+             <ResumePreview data={resumeData} />
+             </div>
         
               <Stack
                 direction={{ xs: "column", sm: "row" }}
@@ -700,7 +701,7 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
               Create a stunning resume in minutes
             </Typography>
           </Box>
-
+  
           <Stepper
             activeStep={activeStep}
             alternativeLabel
@@ -731,16 +732,17 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
               </Step>
             ))}
           </Stepper>
-
+  
           <Divider sx={{ mb: 4 }} />
-
-          <Box display="flex" gap={4} flexDirection={{ xs: "column", md: "row" }}>
+  
+          <Box
+            display="flex"
+            gap={4}
+            flexDirection={{ xs: "column", md: "row" }}
+          >
             {/* Left: Form Steps */}
             <Box flex={1}>
-              <Paper
-                elevation={1}
-                sx={{ p: 3, borderRadius: 2, height: "100%" }}
-              >
+              <Paper elevation={1} sx={{ p: 3, borderRadius: 2, height: "100%" }}>
                 {renderStepContent()}
                 <Box display="flex" justifyContent="space-between" mt={4}>
                   <Button
@@ -763,36 +765,43 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
                 </Box>
               </Paper>
             </Box>
-
+  
             {/* Right: Live Preview */}
             <Box flex={1}>
-              <Paper
-                elevation={1}
-                sx={{
-                  p: 3,
-                  borderRadius: 2,
-                  maxHeight: "80vh",
-                  overflow: "auto",
-                  bgcolor: "#fff",
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  mb={2}
-                  color="primary"
-                  fontWeight="500"
-                >
-                  Live Preview
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <ResumePreview data={resumeData} />
-              </Paper>
-            </Box>
+  <Paper
+    elevation={1}
+    sx={{
+      borderRadius: 2,
+      maxHeight: "80vh",
+      overflow: "hidden", // Changed from auto to prevent double scrollbars
+      bgcolor: "#fff",
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <Box sx={{ p: 3, flexShrink: 0 }}>
+      <Typography variant="h6" mb={2} color="primary" fontWeight="500">
+        Live Preview
+      </Typography>
+      <Divider sx={{ mb: 2 }} />
+    </Box>
+    
+    <Box sx={{ 
+      flex: 1,
+      overflow: "auto",
+      p: 3, // Add padding here instead
+      pt: 0, // Remove top padding to maintain layout
+    }}>
+      <ResumePreview data={resumeData} />
+    </Box>
+  </Paper>
+</Box>
           </Box>
         </Paper>
       </Container>
     </ThemeProvider>
   );
-};
+  }
+  
 
 export default UpdateInformation;
