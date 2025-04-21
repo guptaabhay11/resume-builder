@@ -608,7 +608,7 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
               </Typography>
         
               <div className="p-4 rounded-xl shadow-md border border-gray-200 bg-white">
-                <h2>hey there</h2>
+                
             <ResumePreview resumeData={resumeData} />
              </div>
         

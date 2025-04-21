@@ -29,7 +29,6 @@ const LiveResumePreview: React.FC<{ data: ResumeData }> = ({ data }) => {
           <p className="mb-2">{data.email}</p>
           <p className="mb-2">{data.phone}</p>
           <p className="mb-2">{data.city}</p>
-          <h1>hey there</h1>
           
           <h3 className="mt-6 text-base font-bold border-b border-white pb-1 mb-2">
             Skills
