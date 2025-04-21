@@ -37,6 +37,7 @@ import {
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
 import ResumePDF from "./ResumePdf";
 import ResumePreview from "./ResumePreview";
+import LiveResumePreview from "./LivePreview";
 import { useSendFileMutation, useUploadPdfMutation } from "../services/api"; // adjust path if needed
 import { toast } from "react-toastify";
 
@@ -608,7 +609,7 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
         
               <div className="p-4 rounded-xl shadow-md border border-gray-200 bg-white">
                 <h2>hey there</h2>
-             <ResumePreview data={resumeData} />
+            <ResumePreview resumeData={resumeData} />
              </div>
         
               <Stack
@@ -787,12 +788,13 @@ const UpdateInformation: React.FC = (): React.ReactElement => {
     </Box>
     
     <Box sx={{ 
-      flex: 1,
-      overflow: "auto",
-      p: 3, // Add padding here instead
-      pt: 0, // Remove top padding to maintain layout
+ flex: 1,
+ overflow: "auto",
+ p: 3, // Add padding here instead
+ pt: 0, // Remove// Allow scrolling if content overflows
     }}>
-      <ResumePreview data={resumeData} />
+      <LiveResumePreview data={resumeData} />
+
     </Box>
   </Paper>
 </Box>

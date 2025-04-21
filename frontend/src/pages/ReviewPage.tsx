@@ -37,7 +37,7 @@ const ReviewPage: React.FC<ReviewPageProps> = ({ resumeData }) => {
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Scrollable content area */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '40px' }}>
-        <ResumePreview data={resumeData} />
+        <ResumePreview resumeData={resumeData} />
       </div>
 
       {/* Sticky action bar */}
